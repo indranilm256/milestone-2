@@ -462,66 +462,27 @@ void helpMessage(){
 
 extern FILE *yyin;
 
-int main(int argc,char **argv){
-  /*if(argc==1){
-    helpMessage();
-    return 0;
-  }
-  
-  yyin=NULL;
-  
-  int argCount;
-  for(argc--, argv++; argc>0; argc-=argCount, argv += argCount){
-    argCount = 1;
-    if(!strcmp(*argv, "-h")){
-      helpMessage();
-      return 0;
-    }
-    else if(!strcmp(*argv, "-o")){
-      if (argc > 1){
-        digraph =fopen(*(argv+1),"w");
-        printf("kuldeep\n");
-        //fileflag = 1;
-      }
-      else {
-        helpMessage();
-        return 0;
-      }
-    }
-    else if(!strcmp(*argv, "-i")){
-      if (argc > 1){
-        yyin =fopen(*(argv+1),"r");
-        strncpy(filename,*(argv+1),1024);
-      }
-      else {
-        helpMessage();
-        return 0;
-      }
-    }
-
+int  main(int argc,char **argv){
+	int val;
+	if(argc <= 2){
+		printf("Usage : ./bin/parser ./test/test1.txt -o graph.gv \n");
+	}else{
+		if(!strcmp(argv[argc-2],"-o")){ 
+			if (!(digraph = fopen(argv[argc-1], "w"))){
+				perror("Error: ");
+				return -1;
+			}
+		}
+		if (!(yyin = fopen(argv[1], "r"))){
+			perror("Error: ");
+			return -1;
+		}
+		graphInitialization();
+		yyparse();
+		graphEnd();
+	}
+	return 0;
 }
-fclose(yyin);
-yyin=fopen(filename,"r");
-*/
-
-//printf("%d  %s\n",argc,*(argv));
-digraph=fopen("kk.gv","w");
-graphInitialization();
-//fprintf(digraph,"digraph G {\n");
-yyin=fopen(*(argv+1),"r");
-strncpy(filename,*(argv+1),1024);
-fclose(yyin);
-yyin=fopen(filename,"r");
-//printf("%s\n",yyin);
-yyparse();
-//fprintf(digraph,"a -> b\n");
-//fprintf(digraph,"}\n");
-
-graphEnd();
-return 0;
-}
-
-
 
 void yyerror (char *s,...)
 {
